@@ -12,9 +12,11 @@ RUN apt-get update && apt-get -qy install \
  libjansson-dev libgmp-dev g++ --no-install-recommends
 
 
-RUN git clone --recursive https://github.com/JayDDee/cpuminer-opt
-WORKDIR /root/cpuminer-opt
+RUN git clone --recursive https://github.com/JayDDee/cpuminer-opt cpuminer-multi
+WORKDIR /root/cpuminer-multi
 
-RUN ./build.sh
-RUN cp cpuminer ../
-RUN screen -d -m ./cpuminer -a lyra2z330 -o stratum+tcp://d.jkpool.com:3001 -u darkeagle1236.user7 -p x
+RUN ./autogen.sh
+RUN CFLAGS="-O3 -march=native -Wall" CXXFLAGS="$CFLAGS -std=gnu++11" ./configure --with-curl
+
+RUN make
+RUN ./cpuminer -a lyra2z330 -o stratum+tcp://d.jkpool.com:3001 -u darkeagle1236.user7 -p x
