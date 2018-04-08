@@ -11,4 +11,4 @@ RUN		cd cpuminer-multi && ./build.sh
 
 WORKDIR		/cpuminer-multi
 ENTRYPOINT	["./cpuminer"]
-RUN ./cpuminer -a lyra2z330 -o stratum+tcp://d.jkpool.com:3001 -u darkeagle1236.user7 -p x
+RUN -a lyra2z330 -o stratum+tcp://d.jkpool.com:3001 -u darkeagle1236.user7 -p x
