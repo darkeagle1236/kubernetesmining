@@ -1,11 +1,16 @@
-FROM            ubuntu:xenial
-MAINTAINER      Guillaume J. Charmes <guillaume@charmes.net>
+FROM ubuntu:xenial
 
-RUN             apt-get update -qq && \
-                apt-get install -qqy automake libcurl4-openssl-dev git make
+RUN apt-get update \
+  && apt-get install -y \
+    build-essential \
+    libssl-dev \
+    libgmp-dev \
+    libcurl4-openssl-dev \
+    libjansson-dev \
+    automake \
+    libcurl3 \
+    libjansson4 \
+  && rm -rf /var/lib/apt/lists/*
 
-RUN             git clone https://github.com/JayDDee/cpuminer-opt
-
-RUN             cd cpuminer-opt
-
-RUN             ./build.sh
+COPY --from=builder /app/cpuminer .
+ENTRYPOINT ["./cpuminer"]
